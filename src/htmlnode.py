@@ -8,8 +8,8 @@ class HTMLNode():
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
         self.value = value
-        self.children = children if children is not None else []
-        self.props = props if props is not None else {}
+        self.children = children
+        self.props = props
     
     def to_html(self):
         raise NotImplementedError("to_html not implemented")
@@ -50,8 +50,11 @@ class ParentNode(HTMLNode):
         super().__init__(tag, None, children, props)
 
     def to_html(self):
-        if self.tag == None:
+        if self.tag is None:
             raise ValueError("invalid HTML: missing tag")
-        if self.children == []:
+        if self.children is None:
             raise ValueError("invalid HTML: missing children")
         return f"<{self.tag}{self.props_to_html()}>{"".join([child.to_html() for child in self.children])}</{self.tag}>"
+    
+    def __repr__(self):
+        return f"ParentNode({self.tag}, children: {self.children}, {self.props})"
