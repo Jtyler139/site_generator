@@ -12,7 +12,7 @@ class HTMLNode():
         self.props = props if props is not None else {}
     
     def to_html(self):
-        raise NotImplementedError()
+        raise NotImplementedError("to_html not implemented")
     
     def props_to_html(self):
         if self.props == None:
@@ -26,7 +26,7 @@ class HTMLNode():
         return self.tag == other.tag and self.value == other.value and self.children == other.children  and self.props == other.props
     
     def __repr__(self):
-        return f"Tag:{self.tag}, Value:{self.value}, Children:{self.children}, Props:{self.props}"
+        return f"HTMLNode:{self.tag}, Value:{self.value}, Children:{self.children}, Props:{self.props}"
     
 
 class LeafNode(HTMLNode):
@@ -40,3 +40,6 @@ class LeafNode(HTMLNode):
             return self.value
         
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+    
+    def __repr__(self):
+        return f"LeafNode:{self.tag}, Value:{self.value}, Props:{self.props}"
