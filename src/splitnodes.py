@@ -28,5 +28,3 @@ def extract_markdown_images(text):
 def extract_markdown_links(text):
     matches = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
     return matches
-
-print(extract_markdown_links("This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"))
