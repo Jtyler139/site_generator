@@ -1,9 +1,10 @@
 import unittest
 
-from splitnodes import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes, markdown_to_blocks
+from inline_markdown import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link, text_to_textnodes
+from markdown_blocks import markdown_to_blocks
 from textnode import TextNode, TextType
 
-class TestSplitNode(unittest.TestCase):
+class TestInlineMarkdown(unittest.TestCase):
     def test_expected_val(self):
         node = TextNode("Testing **bold** text", TextType.TEXT)
         node_list = split_nodes_delimiter([node], "**", TextType.BOLD)
