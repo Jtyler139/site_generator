@@ -3,6 +3,7 @@ from enum import Enum
 from htmlnode import ParentNode
 from inline_markdown import text_to_textnodes
 from textnode import text_node_to_html_node, TextNode, TextType
+import os
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -134,9 +135,34 @@ def quote_to_html_node(block):
     lines = block.split("\n")
     new_lines = []
     for line in lines:
-        if not line.startwith(">"):
+        if not line.startswith(">"):
             raise ValueError("invalid quote block")
         new_lines.append(line.lstrip(">").strip())
     content = " ".join(new_lines)
     children = text_to_children(content)
-    return ParentNode("blockquotes", children)
+    return ParentNode("blockquote", children)
+
+def extract_title(markdown):
+    markdown_lines = markdown.split('\n')
+    for line in markdown_lines:
+        if line.startswith("# "):
+            return line[2:].strip()
+    raise Exception("Missing Title")
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    with open(from_path, "r") as file:
+        from_path_content = file.read()
+    with open(template_path, "r") as file:
+        template_path_content = file.read()
+    html_node = markdown_to_html_node(from_path_content)
+    html_string = html_node.to_html()
+    title = extract_title(from_path_content)
+    template_path_content = template_path_content.replace("{{ Title }}", title)
+    template_path_content = template_path_content.replace("{{ Content }}", html_string)
+
+    directory = os.path.dirname(dest_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    with open(dest_path, "w") as file:
+        file.write(template_path_content)
