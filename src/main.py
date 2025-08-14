@@ -1,19 +1,19 @@
 import os
 import shutil
+import sys
 from copystatic import copy_content_to_dir
 from markdown_blocks import generate_page, generate_pages_recursive
 
 def main():
 
-    if os.path.exists("public"):
-        shutil.rmtree("public")
-    os.makedirs("public")
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+    else:
+        basepath = '/'
 
-    copy_content_to_dir("static", "public")
+    copy_content_to_dir("static", "docs")
 
-    #generate_page("content/index.md", "template.html", "public/index.html")
-
-    generate_pages_recursive("content", "template.html", "public")
+    generate_pages_recursive("content", "template.html", "docs", basepath)
 
 if __name__ == "__main__":
     main()
